@@ -8,22 +8,21 @@ terraform {
 
   backend "s3" {
     bucket = "devops-recipe-app-tf-state-2"
-    key    = "terraform-state-setup"
+    key    = "tf-state-setup"
     region = "us-east-1"
     encrypt= true
     dynamodb_table = "devops-recipe-app-tf-lock-2"
   }
 }
 
-# Configure the AWS Provider
 provider "aws" {
   region = "us-east-1"
-  default_tags {
+    default_tags {
     tags = {
         Environment = terraform.workspace
-        Project = var.project
-        contact = var.contact
-        ManageBy = "Terraform/setup"
+        Project     = var.project
+        contact     = var.contact
+        ManageBy    = "Terraform/setup"
     }
   }
 }
