@@ -2,6 +2,8 @@ name: Deploy
 
 on:
     push:
+        paths-ignore:
+            - "infra/setup/**"
         branches:
             - main
             - prod
