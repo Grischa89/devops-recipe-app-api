@@ -22,14 +22,22 @@ resource "aws_internet_gateway" "main" {
 ##################################################
 # Public subnets for load balancer public access #
 ##################################################
+
+# Declare AZs available data source
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.1.1.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = "${data.aws_region.current.name}a"
+  # availability_zone       = "${data.aws_region.current.name}a"
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name = "${local.prefix}-public-a"
+    # Name = "${local.prefix}-public-a"
+    Name = "${local.prefix}-${data.aws_availability_zones.available.names[0]}"
   }
 }
 
@@ -37,7 +45,8 @@ resource "aws_route_table" "public_a" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${local.prefix}-public-a"
+    # Name = "${local.prefix}-public-a"
+    Name = "${local.prefix}-${data.aws_availability_zones.available.names[0]}"
   }
 }
 
@@ -56,10 +65,12 @@ resource "aws_subnet" "public_b" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.1.2.0/24"
   map_public_ip_on_launch = true
-  availability_zone       = "${data.aws_region.current.name}b"
+  # availability_zone       = "${data.aws_region.current.name}b"
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    Name = "${local.prefix}-public-b"
+    # Name = "${local.prefix}-public-b"
+    Name = "${local.prefix}-${data.aws_availability_zones.available.names[1]}"
   }
 }
 
@@ -67,7 +78,8 @@ resource "aws_route_table" "public_b" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${local.prefix}-public-b"
+    # Name = "${local.prefix}-public-b"
+    Name = "${local.prefix}-${data.aws_availability_zones.available.names[1]}"
   }
 }
 
