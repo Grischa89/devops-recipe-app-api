@@ -138,6 +138,7 @@ data "aws_iam_policy_document" "ec2" {
       "ec2:RevokeSecurityGroupIngress",
       "ec2:DescribeAvailabilityZones",
       "s3:HeadObject",
+      "s3:ListBucket",
     ]
     resources = ["*"]
   }
