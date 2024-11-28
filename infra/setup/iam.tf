@@ -52,7 +52,6 @@ resource "aws_iam_user_policy_attachment" "tf_backend" {
   policy_arn = aws_iam_policy.tf_backend.arn
 }
 
-
 #########################
 # Policy for ECR access #
 #########################
@@ -90,7 +89,6 @@ resource "aws_iam_user_policy_attachment" "ecr" {
   user       = aws_iam_user.cd.name
   policy_arn = aws_iam_policy.ecr.arn
 }
-
 
 #########################
 # Policy for EC2 access #
@@ -139,6 +137,7 @@ data "aws_iam_policy_document" "ec2" {
       "ec2:DescribeAvailabilityZones",
       "s3:HeadObject",
       "s3:ListBucket",
+      "s3:*",
     ]
     resources = ["*"]
   }
