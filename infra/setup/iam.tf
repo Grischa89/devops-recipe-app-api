@@ -17,13 +17,13 @@ resource "aws_iam_access_key" "cd" {
 data "aws_iam_policy_document" "tf_backend" {
   statement {
     effect    = "Allow"
-    actions   = ["s3:ListBucket", ]
+    actions   = ["s3:ListBucket"]
     resources = ["arn:aws:s3:::${var.tf_state_bucket}"]
   }
 
   statement {
     effect  = "Allow"
-    actions = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject", ]
+    actions = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
     resources = [
       "arn:aws:s3:::${var.tf_state_bucket}/tf-state-deploy/*",
       "arn:aws:s3:::${var.tf_state_bucket}/tf-state-deploy-env/*"
@@ -167,7 +167,8 @@ data "aws_iam_policy_document" "rds" {
       "rds:CreateDBInstance",
       "rds:DeleteDBInstance",
       "rds:ListTagsForResource",
-      "rds:ModifyDBInstance"
+      "rds:ModifyDBInstance",
+      "rds:AddTagsToResource",
     ]
     resources = ["*"]
   }
