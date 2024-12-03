@@ -31,7 +31,7 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_db_instance" "main" {
-  identifier                 = "${local.prefix}-db"
+  identifier                 = replace("${local.prefix}-db", "_", "-")
   db_name                    = "recipe"
   allocated_storage          = 20
   storage_type               = "gp2"
