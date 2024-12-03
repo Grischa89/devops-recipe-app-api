@@ -31,7 +31,7 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_db_instance" "main" {
-  identifier                 = "raadbidentifier"
+  identifier                 = "${local.prefix}-db"
   db_name                    = "recipe"
   allocated_storage          = 20
   storage_type               = "gp2"
@@ -39,8 +39,8 @@ resource "aws_db_instance" "main" {
   engine_version             = "15.3"
   auto_minor_version_upgrade = true
   instance_class             = "db.t4g.micro"
-  username                   = "db_username"
-  password                   = "db_password"
+  username                   = var.db_username
+  password                   = var.db_password
   skip_final_snapshot        = true
   db_subnet_group_name       = aws_db_subnet_group.main.name
   multi_az                   = false

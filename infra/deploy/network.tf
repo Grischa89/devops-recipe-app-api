@@ -32,12 +32,10 @@ resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.1.1.0/24"
   map_public_ip_on_launch = true
-  # availability_zone       = "${data.aws_region.current.name}a"
-  availability_zone = data.aws_availability_zones.available.names[0]
+  availability_zone       = "${data.aws_region.current.name}a"
 
   tags = {
     Name = "${local.prefix}-public-a"
-    # Name = "${local.prefix}-${data.aws_availability_zones.available.names[0]}"
   }
 }
 
@@ -46,7 +44,6 @@ resource "aws_route_table" "public_a" {
 
   tags = {
     Name = "${local.prefix}-public-a"
-    # Name = "${local.prefix}-${data.aws_availability_zones.available.names[0]}"
   }
 }
 
@@ -65,12 +62,10 @@ resource "aws_subnet" "public_b" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.1.2.0/24"
   map_public_ip_on_launch = true
-  # availability_zone       = "${data.aws_region.current.name}b"
-  availability_zone = data.aws_availability_zones.available.names[1]
+  availability_zone       = "${data.aws_region.current.name}b"
 
   tags = {
     Name = "${local.prefix}-public-b"
-    # Name = "${local.prefix}-${data.aws_availability_zones.available.names[1]}"
   }
 }
 
@@ -79,7 +74,6 @@ resource "aws_route_table" "public_b" {
 
   tags = {
     Name = "${local.prefix}-public-b"
-    # Name = "${local.prefix}-${data.aws_availability_zones.available.names[1]}"
   }
 }
 
@@ -98,26 +92,22 @@ resource "aws_route" "public_internet_access_b" {
 # Private Subnets for internal access only #
 ############################################
 resource "aws_subnet" "private_a" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.1.10.0/24"
-  # availability_zone = "${data.aws_region.current.name}a"
-  availability_zone = data.aws_availability_zones.available.names[0]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.1.10.0/24"
+  availability_zone = "${data.aws_region.current.name}a"
 
   tags = {
     Name = "${local.prefix}-private-a"
-    # Name = "${local.prefix}-${data.aws_availability_zones.available.names[0]}"
   }
 }
 
 resource "aws_subnet" "private_b" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.1.11.0/24"
-  # availability_zone = "${data.aws_region.current.name}b"
-  availability_zone = data.aws_availability_zones.available.names[1]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.1.11.0/24"
+  availability_zone = "${data.aws_region.current.name}b"
 
   tags = {
     Name = "${local.prefix}-private-b"
-    # Name = "${local.prefix}-${data.aws_availability_zones.available.names[1]}"
   }
 }
 

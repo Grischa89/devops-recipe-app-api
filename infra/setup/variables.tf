@@ -17,8 +17,3 @@ variable "contact" {
   description = "Contact name for tagging resources"
   default     = "greg@example.com"
 }
-
-variable "TF_VAR_db_password" {
-  description = "Password for the database"
-  type        = string
-}
