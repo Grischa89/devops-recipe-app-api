@@ -135,7 +135,7 @@ data "aws_iam_policy_document" "ec2" {
       "ec2:ModifyVpcAttribute",
       "ec2:RevokeSecurityGroupIngress",
       "ec2:DescribeAvailabilityZones",
-      "s3:GetObject",
+      "s3:GetObject"
     ]
     resources = ["*"]
   }
@@ -168,7 +168,7 @@ data "aws_iam_policy_document" "rds" {
       "rds:DeleteDBInstance",
       "rds:ListTagsForResource",
       "rds:ModifyDBInstance",
-      "rds:AddTagsToResource",
+      "rds:AddTagsToResource"
     ]
     resources = ["*"]
   }
