@@ -24,7 +24,6 @@ resource "aws_security_group" "rds" {
     from_port = 5432
     to_port   = 5432
 
-    # only these security_groups have incound access
     security_groups = [
       aws_security_group.ecs_service.id
     ]
