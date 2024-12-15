@@ -43,6 +43,7 @@ resource "aws_cloudwatch_log_group" "ecs_task_logs" {
 resource "aws_ecs_cluster" "main" {
   name = "${local.prefix}-cluster"
 }
+
 resource "aws_ecs_task_definition" "api" {
   family                   = "${local.prefix}-api"
   requires_compatibilities = ["FARGATE"]
