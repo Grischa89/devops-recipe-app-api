@@ -42,12 +42,16 @@ jobs:
               env:
                   AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            - name: Login to Amazon ECR
-              uses: aws-actions/amazon-ecr-login@v1
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v1
               with:
                   aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: ${{ vars.AWS_REGION }}
+
+            - name: Login to Amazon ECR
+              uses: aws-actions/amazon-ecr-login@v1
+
             - name: Push to ECR
               env:
                   AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
