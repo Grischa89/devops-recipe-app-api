@@ -33,6 +33,7 @@ jobs:
                   echo "AWS_REGION: ${{ vars.AWS_REGION }}"
                   echo "AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}"
                   echo "ECR_REPO_APP: ${{ vars.ECR_REPO_APP }}"
+                  echo "TF_VAR_DB_PASSWORD: ${{ secrets.TF_VAR_DB_PASSWORD }}"
                   echo "ECR_REPO_PROXY: ${{ vars.ECR_REPO_PROXY }}"
                   echo "GITHUB_SHA: $GITHUB_SHA"
                   # Print length of secrets to verify they exist without exposing them
