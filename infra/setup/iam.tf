@@ -205,6 +205,7 @@ data "aws_iam_policy_document" "ecs" {
       "ecs:CreateCluster",
       "ecs:UpdateCluster",
       "ecs:TagResource",
+      "ecs:DescribeTasks",
     ]
     resources = ["*"]
   }
