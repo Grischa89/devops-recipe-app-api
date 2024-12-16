@@ -28,6 +28,20 @@ jobs:
                   else
                   echo "staging" > .workspace
                   fi
+            - name: Debug Variables
+              run: |
+                  echo "AWS_REGION: ${{ vars.AWS_REGION }}"
+                  echo "AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}"
+                  echo "ECR_REPO_APP: ${{ vars.ECR_REPO_APP }}"
+                  echo "ECR_REPO_PROXY: ${{ vars.ECR_REPO_PROXY }}"
+                  echo "GITHUB_SHA: $GITHUB_SHA"
+                  # Print length of secrets to verify they exist without exposing them
+                  echo "AWS_SECRET_ACCESS_KEY length: ${#AWS_SECRET_ACCESS_KEY}"
+                  echo "AWS_ACCESS_KEY_ID length: ${#AWS_ACCESS_KEY_ID}"
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
             - name: Push to ECR
               env:
                   AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
