@@ -59,7 +59,8 @@ resource "aws_ecs_task_definition" "api" {
         name              = "api"
         image             = var.ecr_app_image
         essential         = true
-        memoryReservation = 512
+        memoryReservation = 256
+        cpu               = 256
         user              = "django-user"
         environment = [
           {
@@ -107,7 +108,8 @@ resource "aws_ecs_task_definition" "api" {
         name              = "proxy"
         image             = var.ecr_proxy_image
         essential         = true
-        memoryReservation = 512
+        memoryReservation = 256
+        cpu               = 256
         user              = "nginx"
         portMappings = [
           {
