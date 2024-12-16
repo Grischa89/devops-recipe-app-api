@@ -208,7 +208,8 @@ resource "aws_ecs_service" "api" {
 data "aws_iam_role" "service_role_for_ecs" {
   name = "AWSServiceRoleForECS"
 }
+
 resource "aws_iam_service_linked_role" "ecs" {
   aws_service_name = "ecs.amazonaws.com"
-  count    = data.aws_iam_role.service_role_for_ecs.name != "" ? 0 : 1
+  count            = data.aws_iam_role.service_role_for_ecs.name != "" ? 0 : 1
 }
