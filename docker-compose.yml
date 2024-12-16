@@ -19,7 +19,7 @@ services:
         environment:
             - DB_HOST=db
             - DB_NAME=devdb
-            - DB_USER=devuser
+            - DB_USER=django-user
             - DB_PASS=changeme123
             - DEBUG=1
         depends_on:
@@ -31,8 +31,8 @@ services:
             - dev-db-data:/var/lib/postgresql/data
         environment:
             - POSTGRES_DB=devdb
-            - POSTGRES_USER=devuser
-            - POSTGRES_PASSWORD=changeme
+            - POSTGRES_USER=django-user
+            - POSTGRES_PASSWORD=changeme123
 
 volumes:
     dev-db-data:

@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+# DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+DEBUG = True
 
 ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
@@ -88,12 +89,14 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'NAME': os.environ.get('DB_NAME', 'dbname'),
+        'USER': os.environ.get('DB_USER', 'django-user'),
+        'PASSWORD': os.environ.get('DB_PASS', 'changeme123'),
     }
 }
+print("DATABASES")
+print(DATABASES)
 
 
 # Password validation
