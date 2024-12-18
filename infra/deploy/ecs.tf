@@ -196,6 +196,28 @@ resource "aws_ecs_service" "api" {
   platform_version       = "1.4.0"
   enable_execute_command = true
 
+  # Add deployment circuit breaker
+  deployment_configuration {
+    deployment_circuit_breaker {
+      enable   = true
+      rollback = true
+    }
+    maximum_percent         = 200
+    minimum_healthy_percent = 50  # Lower this to allow for smoother deployments
+  }
+
+  # Add service connect configuration
+  service_connect_configuration {
+    enabled = true
+  }
+
+  # Add capacity provider strategy
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+    weight           = 1
+    base            = 1
+  }
+
   network_configuration {
     assign_public_ip = true
 
@@ -216,6 +238,24 @@ data "aws_iam_role" "service_role_for_ecs" {
 resource "aws_iam_service_linked_role" "ecs" {
   aws_service_name = "${local.prefix}-ecs.amazonaws.com"
   count            = data.aws_iam_role.service_role_for_ecs.name != "" ? 0 : 1
+}
+
+# Add CloudWatch Alarms
+resource "aws_cloudwatch_metric_alarm" "service_health" {
+  alarm_name          = "${var.prefix}-service-health"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "HealthyTaskCount"
+  namespace           = "AWS/ECS"
+  period             = "60"
+  statistic          = "Average"
+  threshold          = "1"
+  alarm_description  = "This metric monitors the number of healthy tasks"
+
+  dimensions = {
+    ClusterName = aws_ecs_cluster.main.name
+    ServiceName = aws_ecs_service.api.name
+  }
 }
 
 
