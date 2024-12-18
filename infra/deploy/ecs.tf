@@ -52,6 +52,9 @@ resource "aws_ecs_task_definition" "api" {
   memory                   = 1024
   execution_role_arn       = aws_iam_role.task_execution_role.arn
   task_role_arn            = aws_iam_role.app_task.arn
+  ephemeral_storage {
+    size_in_gib = 21
+  }
 
   container_definitions = jsonencode(
     [
@@ -61,7 +64,7 @@ resource "aws_ecs_task_definition" "api" {
         essential         = true
         memoryReservation = 512
         cpu               = 256
-        user              = "django-user"
+        user              = "1000:1000"
         environment = [
           {
             name  = "DJANGO_SECRET_KEY"
@@ -90,11 +93,20 @@ resource "aws_ecs_task_definition" "api" {
         ]
         mountPoints = [
           {
-            readOnly      = false
-            containerPath = "/vol/web/static"
             sourceVolume  = "static"
+            containerPath = "/vol/web/static"
+            readOnly      = false
+          },
+          {
+            sourceVolume  = "tmp"
+            containerPath = "/tmp"
+            readOnly      = false
           }
-        ],
+        ]
+        linuxParameters = {
+          initProcessEnabled = true
+          shared_memory_size = 128
+        }
         logConfiguration = {
           logDriver = "awslogs"
           options = {
@@ -111,7 +123,7 @@ resource "aws_ecs_task_definition" "api" {
         essential         = true
         memoryReservation = 512
         cpu               = 256
-        user              = "nginx"
+        user              = "101:101"
         portMappings = [
           {
             containerPort = 8000
@@ -146,6 +158,10 @@ resource "aws_ecs_task_definition" "api" {
 
   volume {
     name = "static"
+  }
+
+  volume {
+    name = "tmp"
   }
 
   runtime_platform {
@@ -196,36 +212,12 @@ resource "aws_ecs_service" "api" {
   platform_version       = "1.4.0"
   enable_execute_command = true
 
-  # Add deployment circuit breaker
-  deployment_configuration {
-    deployment_circuit_breaker {
-      enable   = true
-      rollback = true
-    }
-    maximum_percent         = 200
-    minimum_healthy_percent = 50  # Lower this to allow for smoother deployments
-  }
-
-  # Add service connect configuration
-  service_connect_configuration {
-    enabled = true
-  }
-
-  # Add capacity provider strategy
-  capacity_provider_strategy {
-    capacity_provider = "FARGATE"
-    weight           = 1
-    base            = 1
-  }
-
   network_configuration {
     assign_public_ip = true
-
     subnets = [
       aws_subnet.public_a.id,
       aws_subnet.public_b.id
     ]
-
     security_groups = [aws_security_group.ecs_service.id]
   }
 }
@@ -247,10 +239,10 @@ resource "aws_cloudwatch_metric_alarm" "service_health" {
   evaluation_periods  = "2"
   metric_name         = "HealthyTaskCount"
   namespace           = "AWS/ECS"
-  period             = "60"
-  statistic          = "Average"
-  threshold          = "1"
-  alarm_description  = "This metric monitors the number of healthy tasks"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "1"
+  alarm_description   = "This metric monitors the number of healthy tasks"
 
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
