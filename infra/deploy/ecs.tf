@@ -101,6 +101,7 @@ resource "aws_ecs_task_definition" "api" {
             awslogs-group         = aws_cloudwatch_log_group.ecs_task_logs.name
             awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "api"
+            awslogs-create-group  = "true"
           }
         }
       },
@@ -136,6 +137,7 @@ resource "aws_ecs_task_definition" "api" {
             awslogs-group         = aws_cloudwatch_log_group.ecs_task_logs.name
             awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "proxy"
+            awslogs-create-group  = "true"
           }
         }
       }
@@ -215,3 +217,5 @@ resource "aws_iam_service_linked_role" "ecs" {
   aws_service_name = "${local.prefix}-ecs.amazonaws.com"
   count            = data.aws_iam_role.service_role_for_ecs.name != "" ? 0 : 1
 }
+
+

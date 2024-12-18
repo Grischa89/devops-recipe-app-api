@@ -3,6 +3,8 @@ LABEL maintainer="londonappdeveloper.com"
 
 ENV PYTHONUNBUFFERED 1
 
+RUN addgroup -S app && adduser -S -G app django-user
+
 ARG UID=101
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
@@ -23,16 +25,12 @@ RUN python -m venv /py && \
     fi && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
-    adduser \
-        --uid $UID \
-        --disabled-password \
-        --no-create-home \
-        django-user && \
     mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
-    chown -R django-user:django-user /vol/web && \
+    chown -R django-user:app /vol/web && \
     chmod -R 755 /vol/web && \
-    chmod -R +x /scripts
+    chmod -R +x /scripts && \
+    chown -R django-user:app /py
 
 ENV PATH="/scripts:/py/bin:$PATH"
 
