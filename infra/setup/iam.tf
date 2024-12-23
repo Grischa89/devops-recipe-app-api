@@ -59,7 +59,7 @@ resource "aws_iam_user_policy_attachment" "tf_backend" {
 data "aws_iam_policy_document" "ecr" {
   statement {
     effect    = "Allow"
-    actions   = ["ecr:GetAuthorizationToken", "ecr:*"]
+    actions   = ["ecr:GetAuthorizationToken",]
     resources = ["*"]
   }
 
@@ -71,7 +71,6 @@ data "aws_iam_policy_document" "ecr" {
       "ecr:InitiateLayerUpload",
       "ecr:BatchCheckLayerAvailability",
       "ecr:PutImage",
-      "ecr:*"
     ]
     resources = [
       aws_ecr_repository.app.arn,
@@ -293,4 +292,35 @@ resource "aws_iam_policy" "logs" {
 resource "aws_iam_user_policy_attachment" "logs" {
   user       = aws_iam_user.cd.name
   policy_arn = aws_iam_policy.logs.arn
+}
+
+################################
+# Policy for CloudWatch access #
+################################
+
+data "aws_iam_policy_document" "cloudwatch" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "cloudwatch:PutMetricAlarm",
+      "cloudwatch:DescribeAlarms",
+      "cloudwatch:DeleteAlarms",
+      "cloudwatch:DescribeAlarmHistory",
+      "cloudwatch:GetMetricStatistics",
+      "cloudwatch:ListMetrics",
+      "cloudwatch:ListTagsForResource"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "cloudwatch" {
+  name        = "${aws_iam_user.cd.name}-cloudwatch"
+  description = "Allow user to manage CloudWatch resources."
+  policy      = data.aws_iam_policy_document.cloudwatch.json
+}
+
+resource "aws_iam_user_policy_attachment" "cloudwatch" {
+  user       = aws_iam_user.cd.name
+  policy_arn = aws_iam_policy.cloudwatch.arn
 }
