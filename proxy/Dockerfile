@@ -17,6 +17,9 @@ RUN mkdir -p /vol/static && \
     chown -R django-user:django-user /vol && \
     mkdir -p /etc/nginx/conf.d && \
     chown -R django-user:nginx /etc/nginx/conf.d && \
+    chown -R nginx:nginx /vol && \
+    mkdir -p /etc/nginx/conf.d && \
+    chown nginx:nginx /etc/nginx/conf.d && \
     touch /etc/nginx/conf.d/default.conf && \
     chown django-user:nginx /etc/nginx/conf.d/default.conf && \
     chmod 664 /etc/nginx/conf.d/default.conf && \
