@@ -1,6 +1,9 @@
 FROM nginxinc/nginx-unprivileged:1-alpine
 LABEL maintainer="londonappdeveloper.com"
 
+# Create the django-user
+RUN addgroup -S django-user && adduser -S django-user -G django-user
+
 COPY ./default.conf.tpl /etc/nginx/default.conf.tpl
 COPY ./gunicorn_headers /etc/nginx/gunicorn_headers
 COPY ./run.sh /run.sh
@@ -17,9 +20,6 @@ RUN mkdir -p /vol/static && \
     chown -R django-user:django-user /vol && \
     mkdir -p /etc/nginx/conf.d && \
     chown -R django-user:nginx /etc/nginx/conf.d && \
-    chown -R nginx:nginx /vol && \
-    mkdir -p /etc/nginx/conf.d && \
-    chown nginx:nginx /etc/nginx/conf.d && \
     touch /etc/nginx/conf.d/default.conf && \
     chown django-user:nginx /etc/nginx/conf.d/default.conf && \
     chmod 664 /etc/nginx/conf.d/default.conf && \
