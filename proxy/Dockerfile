@@ -15,6 +15,8 @@ RUN mkdir -p /vol/static && \
     mkdir -p /vol/media && \
     chmod -R 755 /vol && \
     chown -R nginx:nginx /vol && \
+    mkdir -p /etc/nginx/conf.d && \
+    chown nginx:nginx /etc/nginx/conf.d && \
     touch /etc/nginx/conf.d/default.conf && \
     chown nginx:nginx /etc/nginx/conf.d/default.conf && \
     chmod +x /run.sh
