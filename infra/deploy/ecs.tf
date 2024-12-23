@@ -247,5 +247,3 @@ resource "aws_cloudwatch_metric_alarm" "service_health" {
     ServiceName = aws_ecs_service.api.name
   }
 }
-
-
