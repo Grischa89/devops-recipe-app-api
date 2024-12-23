@@ -48,8 +48,8 @@ resource "aws_ecs_task_definition" "api" {
   family                   = "${local.prefix}-api"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = 512
-  memory                   = 1024
+  cpu                      = 256
+  memory                   = 512
   execution_role_arn       = aws_iam_role.task_execution_role.arn
   task_role_arn            = aws_iam_role.app_task.arn
   ephemeral_storage {
@@ -62,8 +62,7 @@ resource "aws_ecs_task_definition" "api" {
         name              = "api"
         image             = var.ecr_app_image
         essential         = true
-        memoryReservation = 512
-        cpu               = 256
+        memoryReservation = 256
         user              = "1000:1000"
         environment = [
           {
@@ -121,8 +120,7 @@ resource "aws_ecs_task_definition" "api" {
         name              = "proxy"
         image             = var.ecr_proxy_image
         essential         = true
-        memoryReservation = 512
-        cpu               = 256
+        memoryReservation = 256
         user              = "101:101"
         portMappings = [
           {
