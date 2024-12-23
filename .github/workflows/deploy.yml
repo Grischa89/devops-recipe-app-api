@@ -28,29 +28,12 @@ jobs:
                   else
                   echo "staging" > .workspace
                   fi
-            - name: Debug Variables
-              run: |
-                  echo "AWS_REGION: ${{ vars.AWS_REGION }}"
-                  echo "AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}"
-                  echo "ECR_REPO_APP: ${{ vars.ECR_REPO_APP }}"
-                  echo "TF_VAR_DB_PASSWORD: ${{ secrets.TF_VAR_DB_PASSWORD }}"
-                  echo "ECR_REPO_PROXY: ${{ vars.ECR_REPO_PROXY }}"
-                  echo "GITHUB_SHA: $GITHUB_SHA"
-                  # Print length of secrets to verify they exist without exposing them
-                  echo "AWS_SECRET_ACCESS_KEY length: ${#AWS_SECRET_ACCESS_KEY}"
-                  echo "AWS_ACCESS_KEY_ID length: ${#AWS_ACCESS_KEY_ID}"
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
             - name: Push to ECR
               env:
                   AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  AWS_DEFAULT_REGION: ${{ vars.AWS_REGION }}
-                  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
               run: |
-                  docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+                  aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
                   docker build --compress -t ${{ vars.ECR_REPO_APP }}:$GITHUB_SHA .
                   docker push ${{ vars.ECR_REPO_APP }}:$GITHUB_SHA
                   docker build --compress -t ${{ vars.ECR_REPO_PROXY }}:$GITHUB_SHA proxy/
