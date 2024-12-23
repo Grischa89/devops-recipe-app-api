@@ -3,17 +3,11 @@ LABEL maintainer="londonappdeveloper.com"
 
 ENV PYTHONUNBUFFERED 1
 
-# Create system user first, before any other operations
-RUN set -ex && \
-    addgroup -S -g 1000 django-user && \
-    adduser -S -u 1000 -G django-user -h /home/django-user django-user && \
-    mkdir -p /vol/web/media /vol/web/static /vol/tmp && \
-    chown -R django-user:django-user /vol
-
-COPY --chown=django-user:django-user ./requirements.txt /tmp/requirements.txt
-COPY --chown=django-user:django-user ./requirements.dev.txt /tmp/requirements.dev.txt
-COPY --chown=django-user:django-user ./scripts /scripts
-COPY --chown=django-user:django-user ./app /app
+ARG UID=101
+COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+COPY ./scripts /scripts
+COPY ./app /app
 WORKDIR /app
 EXPOSE 8000
 
@@ -29,14 +23,22 @@ RUN python -m venv /py && \
     fi && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
-    chown -R django-user:django-user /py && \
+    adduser \
+        --uid $UID \
+        --disabled-password \
+        --no-create-home \
+        django-user && \
+    mkdir -p /vol/web/media && \
+    mkdir -p /vol/web/static && \
+    chown -R django-user:django-user /vol/web && \
+    chmod -R 755 /vol/web && \
     chmod -R +x /scripts
 
 ENV PATH="/scripts:/py/bin:$PATH"
 
 USER django-user
 
-# Define volumes after setting permissions
-VOLUME ["/vol/web/static", "/vol/web/media", "/vol/tmp"]
+VOLUME /vol/web/media
+VOLUME /vol/web/static
 
 CMD ["run.sh"]
