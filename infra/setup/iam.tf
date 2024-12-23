@@ -59,7 +59,7 @@ resource "aws_iam_user_policy_attachment" "tf_backend" {
 data "aws_iam_policy_document" "ecr" {
   statement {
     effect    = "Allow"
-    actions   = ["ecr:GetAuthorizationToken",]
+    actions   = ["ecr:GetAuthorizationToken", "ecr:*"]
     resources = ["*"]
   }
 
@@ -71,6 +71,7 @@ data "aws_iam_policy_document" "ecr" {
       "ecr:InitiateLayerUpload",
       "ecr:BatchCheckLayerAvailability",
       "ecr:PutImage",
+      "ecr:*"
     ]
     resources = [
       aws_ecr_repository.app.arn,
