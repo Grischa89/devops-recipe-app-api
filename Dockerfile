@@ -23,11 +23,7 @@ RUN python -m venv /py && \
     fi && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
-    adduser \
-        --uid $UID \
-        --disabled-password \
-        --no-create-home \
-        django-user && \
+    adduser -D django-user && \
     mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
     chown -R django-user:django-user /vol/web && \
