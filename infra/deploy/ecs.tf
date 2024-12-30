@@ -93,7 +93,7 @@ resource "aws_ecs_task_definition" "api" {
             containerPath = "/vol/web/static"
             sourceVolume  = "static"
           }
-          ],
+        ],
         logConfiguration = {
           logDriver = "awslogs"
           options = {
@@ -201,33 +201,5 @@ resource "aws_ecs_service" "api" {
       aws_subnet.public_b.id
     ]
     security_groups = [aws_security_group.ecs_service.id]
-  }
-}
-
-# check if AWSServiceRoleForECS already exists
-data "aws_iam_role" "service_role_for_ecs" {
-  name = "AWSServiceRoleForECS"
-}
-
-resource "aws_iam_service_linked_role" "ecs" {
-  aws_service_name = "${local.prefix}-ecs.amazonaws.com"
-  count            = data.aws_iam_role.service_role_for_ecs.name != "" ? 0 : 1
-}
-
-# Add CloudWatch Alarms
-resource "aws_cloudwatch_metric_alarm" "service_health" {
-  alarm_name          = "${var.prefix}-service-health"
-  comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "HealthyTaskCount"
-  namespace           = "AWS/ECS"
-  period              = "60"
-  statistic           = "Average"
-  threshold           = "1"
-  alarm_description   = "This metric monitors the number of healthy tasks"
-
-  dimensions = {
-    ClusterName = aws_ecs_cluster.main.name
-    ServiceName = aws_ecs_service.api.name
   }
 }
