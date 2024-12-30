@@ -19,8 +19,6 @@ RUN mkdir -p /vol/static && \
     chown nginx:nginx /etc/nginx/conf.d/default.conf && \
     chmod +x /run.sh
 
-RUN chown -R nginx1:nginx1 /vol 
-
 USER nginx
 
 VOLUME /vol/static

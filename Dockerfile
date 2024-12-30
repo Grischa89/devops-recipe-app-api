@@ -8,6 +8,7 @@ COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./scripts /scripts
 COPY ./app /app
+COPY ./requirements222.txt /tmp/requirements222.txt
 WORKDIR /app
 EXPOSE 8000
 
@@ -29,6 +30,8 @@ RUN python -m venv /py && \
     chown -R django-user:django-user /vol/web && \
     chmod -R 755 /vol/web && \
     chmod -R +x /scripts
+
+COPY ./requirements333.txt /tmp/requirements333.txt
 
 ENV PATH="/scripts:/py/bin:$PATH"
 
