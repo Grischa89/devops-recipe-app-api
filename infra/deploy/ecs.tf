@@ -117,7 +117,11 @@ resource "aws_ecs_task_definition" "api" {
         environment = [
           {
             name  = "APP_HOST"
-            value = "localhost"
+            value = "api"
+          },
+          {
+            name  = "APP_PORT"
+            value = "8000"
           }
         ]
         mountPoints = [
