@@ -52,9 +52,6 @@ resource "aws_ecs_task_definition" "api" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.task_execution_role.arn
   task_role_arn            = aws_iam_role.app_task.arn
-  ephemeral_storage {
-    size_in_gib = 21
-  }
 
   container_definitions = jsonencode(
     [
@@ -95,17 +92,8 @@ resource "aws_ecs_task_definition" "api" {
             readOnly      = false
             containerPath = "/vol/web/static"
             sourceVolume  = "static"
-          },
-          {
-            sourceVolume  = "tmp"
-            containerPath = "/tmp"
-            readOnly      = false
           }
-        ]
-        linuxParameters = {
-          initProcessEnabled = true
-          shared_memory_size = 128
-        }
+          ],
         logConfiguration = {
           logDriver = "awslogs"
           options = {
@@ -156,10 +144,6 @@ resource "aws_ecs_task_definition" "api" {
 
   volume {
     name = "static"
-  }
-
-  volume {
-    name = "tmp"
   }
 
   runtime_platform {
