@@ -60,6 +60,7 @@ resource "aws_ecs_task_definition" "api" {
         image             = var.ecr_app_image
         essential         = true
         memoryReservation = 256
+        user              = "django-user"
         environment = [
           {
             name  = "DJANGO_SECRET_KEY"
@@ -108,6 +109,7 @@ resource "aws_ecs_task_definition" "api" {
         image             = var.ecr_proxy_image
         essential         = true
         memoryReservation = 256
+        user              = "nginx"
         portMappings = [
           {
             containerPort = 8000
@@ -117,16 +119,8 @@ resource "aws_ecs_task_definition" "api" {
         environment = [
           {
             name  = "APP_HOST"
-            value = "api"
+            value = "127.0.0.1"
           },
-          {
-            name  = "APP_PORT"
-            value = "8000"
-          },
-          {
-            name  = "LISTEN_PORT"
-            value = "8000"
-          }
         ]
         mountPoints = [
           {
