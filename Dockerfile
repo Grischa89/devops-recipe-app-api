@@ -23,7 +23,6 @@ RUN python -m venv /py && \
     fi && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
-    adduser -D django-user && \
     adduser \
         --uid $UID \
         --disabled-password \
