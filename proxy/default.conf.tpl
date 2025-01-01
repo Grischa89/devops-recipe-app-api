@@ -22,16 +22,23 @@ server {
         include              gunicorn_headers;
         proxy_redirect       off;
         proxy_pass          http://127.0.0.1:${APP_PORT};
-        proxy_http_version  1.1;
-        proxy_cache_bypass  $http_upgrade;
-        proxy_set_header    Upgrade $http_upgrade;
-        proxy_set_header    Connection "upgrade";
-        proxy_set_header    Host $host;
+        
+        # Reset forwarded headers to prevent loops
+        proxy_set_header    X-Forwarded-For $remote_addr;
         proxy_set_header    X-Real-IP $remote_addr;
-        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header    X-Forwarded-Proto $scheme;
-        proxy_set_header    X-Forwarded-Host $host;
-        proxy_set_header    X-Forwarded-Port $server_port;
+        proxy_set_header    Host $http_host;
+        
+        # Remove upgrade headers that might cause issues
+        proxy_set_header    Upgrade "";
+        proxy_set_header    Connection "";
+        
         client_max_body_size 10M;
+    }
+
+    # Handle favicon.ico separately
+    location = /favicon.ico {
+        return 204;
+        access_log off;
+        log_not_found off;
     }
 }
