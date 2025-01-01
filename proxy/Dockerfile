@@ -15,9 +15,17 @@ RUN mkdir -p /vol/static && \
     mkdir -p /vol/media && \
     chmod -R 755 /vol && \
     chown -R nginx:nginx /vol && \
+    chmod 755 /etc/nginx/conf.d && \
+    chown -R nginx:nginx /etc/nginx/conf.d && \
     touch /etc/nginx/conf.d/default.conf && \
     chown nginx:nginx /etc/nginx/conf.d/default.conf && \
-    chmod +x /run.sh
+    chmod 644 /etc/nginx/conf.d/default.conf && \
+    chmod +x /run.sh && \
+    # Verify permissions
+    echo "Verifying nginx user and permissions:" && \
+    id nginx && \
+    ls -la /vol && \
+    ls -la /etc/nginx/conf.d
 
 USER nginx
 

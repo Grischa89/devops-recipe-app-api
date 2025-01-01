@@ -4,6 +4,8 @@ LABEL maintainer="londonappdeveloper.com"
 ENV PYTHONUNBUFFERED 1
 
 ARG UID=1000
+ARG GID=1000
+
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./scripts /scripts
@@ -24,15 +26,16 @@ RUN python -m venv /py && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
     echo "Creating django-user..." && \
-    adduser -u $UID -D -h /home/django-user django-user && \
+    addgroup -g $GID django-group && \
+    adduser -u $UID -G django-group -D -h /home/django-user django-user && \
     echo "Creating directories..." && \
     mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
     mkdir -p /tmp && \
     echo "Setting ownership..." && \
-    chown -R django-user:django-user /vol && \
-    chown -R django-user:django-user /tmp && \
-    chown -R django-user:django-user /home/django-user && \
+    chown -R django-user:django-group /vol && \
+    chown -R django-user:django-group /tmp && \
+    chown -R django-user:django-group /home/django-user && \
     echo "Setting permissions..." && \
     chmod -R 755 /vol && \
     chmod -R 755 /tmp && \

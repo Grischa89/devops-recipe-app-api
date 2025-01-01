@@ -33,3 +33,15 @@ variable "ecr_app_image" {
 variable "django_secret_key" {
   description = "Secret key for Django"
 }
+
+variable "app_user_id" {
+  description = "User ID for the application container"
+  type        = number
+  default     = 1000
+}
+
+variable "app_group_id" {
+  description = "Group ID for the application container"
+  type        = number
+  default     = 1000
+}
