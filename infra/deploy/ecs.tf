@@ -52,6 +52,9 @@ resource "aws_ecs_task_definition" "api" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.task_execution_role.arn
   task_role_arn            = aws_iam_role.app_task.arn
+  ephemeral_storage {
+    size_in_gib = 21
+  }
 
   container_definitions = jsonencode(
     [
@@ -145,9 +148,6 @@ resource "aws_ecs_task_definition" "api" {
 
   volume {
     name = "static"
-    ephemeral_storage {
-      size_in_gib = 21
-    }
   }
 
   runtime_platform {
