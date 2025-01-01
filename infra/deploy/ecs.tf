@@ -115,7 +115,7 @@ resource "aws_ecs_task_definition" "api" {
           {
             containerPort = 8000
             hostPort      = 8000
-          }
+        }]
         dependsOn = [{
           containerName = "api"
           condition     = "START"
@@ -124,7 +124,7 @@ resource "aws_ecs_task_definition" "api" {
           {
             name  = "APP_HOST"
             value = "127.0.0.1"
-          },
+          }
         ]
         mountPoints = [
           {
@@ -200,10 +200,12 @@ resource "aws_ecs_service" "api" {
 
   network_configuration {
     assign_public_ip = true
+
     subnets = [
       aws_subnet.public_a.id,
       aws_subnet.public_b.id
     ]
+
     security_groups = [aws_security_group.ecs_service.id]
   }
 }
