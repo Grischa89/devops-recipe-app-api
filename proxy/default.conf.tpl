@@ -23,9 +23,6 @@ server {
         proxy_redirect       off;
         proxy_pass          http://127.0.0.1:${APP_PORT};
         
-        # Basic proxy settings
-        proxy_set_header    Host $host;
-        
         # Timeouts
         proxy_connect_timeout 600;
         proxy_send_timeout    600;
