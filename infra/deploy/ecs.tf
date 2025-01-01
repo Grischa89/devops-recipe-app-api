@@ -125,6 +125,14 @@ resource "aws_ecs_task_definition" "api" {
           {
             name  = "APP_HOST"
             value = "127.0.0.1"
+          },
+          {
+            name  = "APP_PORT"
+            value = "9000"
+          },
+          {
+            name  = "LISTEN_PORT"
+            value = "8000"
           }
         ]
         mountPoints = [
