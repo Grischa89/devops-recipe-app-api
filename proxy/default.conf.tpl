@@ -1,7 +1,3 @@
-upstream django {
-    server ${APP_HOST}:${APP_PORT};
-}
-
 server {
     listen ${LISTEN_PORT};
 
@@ -16,7 +12,7 @@ server {
     location / {
         include              gunicorn_headers;
         proxy_redirect       off;
-        proxy_pass          http://django;
+        proxy_pass           http://${APP_HOST}:${APP_PORT};
         client_max_body_size 10M;
     }
 }
