@@ -25,8 +25,6 @@ server {
         
         # Simple proxy headers
         proxy_set_header    X-Real-IP $remote_addr;
-        proxy_set_header    X-Forwarded-For $remote_addr;
-        proxy_set_header    Host $http_host;
         
         # Timeouts
         proxy_connect_timeout 600;
