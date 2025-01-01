@@ -23,8 +23,8 @@ server {
         proxy_redirect       off;
         proxy_pass          http://127.0.0.1:${APP_PORT};
         
-        # Simple proxy headers
-        proxy_set_header    X-Real-IP $remote_addr;
+        # Basic proxy settings
+        proxy_set_header    Host $host;
         
         # Timeouts
         proxy_connect_timeout 600;
