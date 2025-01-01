@@ -60,7 +60,6 @@ resource "aws_ecs_task_definition" "api" {
         image             = var.ecr_app_image
         essential         = true
         memoryReservation = 256
-        command           = ["gunicorn", "--bind", "0.0.0.0:8000", "app.wsgi:application"]
         user              = "django-user"
         environment = [
           {
@@ -94,7 +93,10 @@ resource "aws_ecs_task_definition" "api" {
             containerPath = "/vol/web/static"
             sourceVolume  = "static"
           }
-        ],
+        ]
+        linuxParameters = {
+          initProcessEnabled = true
+        }
         logConfiguration = {
           logDriver = "awslogs"
           options = {
