@@ -11,7 +11,16 @@ ls -la /vol/static
 ls -la /etc/nginx/conf.d
 
 echo "Generating Nginx configuration..."
-envsubst < /etc/nginx/default.conf.tpl > /etc/nginx/conf.d/default.conf
+# Create temp file in a directory we know we have write access to
+TMP_CONF="/tmp/default.conf.tmp"
+envsubst < /etc/nginx/default.conf.tpl > "$TMP_CONF"
+# Use sudo to copy the file to its final location
+if [ -w /etc/nginx/conf.d/default.conf ]; then
+    mv "$TMP_CONF" /etc/nginx/conf.d/default.conf
+else
+    echo "Warning: Cannot write directly to nginx conf directory"
+    cat "$TMP_CONF" > /etc/nginx/conf.d/default.conf
+fi
 
 echo "Nginx configuration:"
 cat /etc/nginx/conf.d/default.conf

@@ -145,6 +145,11 @@ resource "aws_ecs_task_definition" "api" {
 
   volume {
     name = "static"
+    docker_volume_configuration {
+      scope         = "task"
+      autoprovision = true
+      driver       = "local"
+    }
   }
 
   runtime_platform {
