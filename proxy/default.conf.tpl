@@ -21,8 +21,13 @@ server {
     location / {
         include              gunicorn_headers;
         proxy_redirect       off;
-        proxy_pass          http://localhost:${APP_PORT};
+        proxy_pass          http://${APP_HOST}:${APP_PORT};
         
+        # Add these headers for better proxy communication
+        proxy_set_header    Host $host;
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto $scheme;
         
         # Timeouts
         proxy_connect_timeout 600;

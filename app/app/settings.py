@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 # DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # For testing. In production, use specific domain names
 ALLOWED_HOSTS.extend(
     filter(
         None,
