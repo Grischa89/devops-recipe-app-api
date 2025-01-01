@@ -23,21 +23,16 @@ server {
         proxy_redirect       off;
         proxy_pass          http://127.0.0.1:${APP_PORT};
         
-        # Basic proxy settings
-        proxy_set_header    Host $host;
+        # Simple proxy headers
         proxy_set_header    X-Real-IP $remote_addr;
-        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header    X-Forwarded-Proto $scheme;
-        
-        # Remove upgrade headers
-        proxy_set_header    Upgrade $http_upgrade;
-        proxy_set_header    Connection "upgrade";
+        proxy_set_header    X-Forwarded-For $remote_addr;
+        proxy_set_header    Host $http_host;
         
         # Timeouts
-        proxy_connect_timeout       600;
-        proxy_send_timeout         600;
-        proxy_read_timeout         600;
-        send_timeout              600;
+        proxy_connect_timeout 600;
+        proxy_send_timeout    600;
+        proxy_read_timeout    600;
+        send_timeout         600;
         
         client_max_body_size 10M;
     }
