@@ -135,14 +135,7 @@ resource "aws_ecs_task_definition" "api" {
           }
         ]
         linuxParameters = {
-          initProcessEnabled = true,
-          tmpfs = [
-            {
-              containerPath = "/tmp/nginx",
-              size          = 100,
-              mountOptions  = ["rw", "noexec", "nosuid"]
-            }
-          ]
+          initProcessEnabled = true
         }
         logConfiguration = {
           logDriver = "awslogs"

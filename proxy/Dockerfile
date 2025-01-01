@@ -18,24 +18,19 @@ RUN mkdir -p /vol/static && \
     mkdir -p /var/run && \
     chmod -R 755 /vol && \
     chown -R nginx:nginx /vol && \
-    chmod -R 755 /etc/nginx && \
+    chmod -R 777 /etc/nginx && \
     chown -R nginx:nginx /etc/nginx && \
     chmod -R 755 /var/cache/nginx && \
     chown -R nginx:nginx /var/cache/nginx && \
     chmod -R 755 /var/run && \
     chown -R nginx:nginx /var/run && \
     chmod +x /run.sh && \
-    # Create a writable temp directory for nginx user
-    mkdir -p /tmp/nginx && \
-    chown -R nginx:nginx /tmp/nginx && \
-    chmod -R 755 /tmp/nginx && \
     # Verify permissions
     echo "Verifying nginx user and permissions:" && \
     id nginx && \
     ls -la /vol && \
     ls -la /etc/nginx/conf.d && \
     ls -la /etc/nginx && \
-    ls -la /tmp/nginx && \
     ls -la /var/cache/nginx && \
     ls -la /var/run
 

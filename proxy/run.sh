@@ -13,15 +13,7 @@ ls -la /var/cache/nginx
 ls -la /var/run
 
 echo "Generating Nginx configuration..."
-# Create temp file in nginx temp directory
-TMP_CONF="/tmp/nginx/default.conf"
-envsubst < /etc/nginx/default.conf.tpl > "$TMP_CONF"
-
-echo "Generated configuration:"
-cat "$TMP_CONF"
-
-echo "Copying configuration..."
-cp "$TMP_CONF" /etc/nginx/conf.d/default.conf
+envsubst < /etc/nginx/default.conf.tpl > /etc/nginx/conf.d/default.conf
 
 echo "Final Nginx configuration:"
 cat /etc/nginx/conf.d/default.conf || echo "Failed to read config"
