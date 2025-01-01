@@ -145,10 +145,8 @@ resource "aws_ecs_task_definition" "api" {
 
   volume {
     name = "static"
-    docker_volume_configuration {
-      scope         = "task"
-      autoprovision = true
-      driver        = "local"
+    ephemeral_storage {
+      size_in_gib = 21
     }
   }
 
