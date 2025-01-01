@@ -19,14 +19,9 @@ server {
     }
 
     location / {
+        include              gunicorn_headers;
         proxy_redirect       off;
         proxy_pass          http://api:${APP_PORT};
-        
-        # Set headers directly here instead of including gunicorn_headers
-        proxy_set_header    Host $http_host;
-        proxy_set_header    X-Real-IP $remote_addr;
-        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header    X-Forwarded-Proto $scheme;
         
         # Timeouts
         proxy_connect_timeout 600;
