@@ -88,6 +88,10 @@ resource "aws_ecs_task_definition" "api" {
           {
             name  = "ALLOWED_HOSTS"
             value = "*"
+          },
+          {
+            name  = "LISTEN_PORT"
+            value = "9000"
           }
         ]
         mountPoints = [
