@@ -19,12 +19,11 @@ server {
     }
 
     location / {
-        include              gunicorn_headers;
         proxy_redirect       off;
-        proxy_pass          http://${APP_HOST}:${APP_PORT};
+        proxy_pass          http://api:${APP_PORT};
         
-        # Add these headers for better proxy communication
-        proxy_set_header    Host $host;
+        # Set headers directly here instead of including gunicorn_headers
+        proxy_set_header    Host $http_host;
         proxy_set_header    X-Real-IP $remote_addr;
         proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header    X-Forwarded-Proto $scheme;
