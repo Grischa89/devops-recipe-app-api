@@ -103,7 +103,6 @@ resource "aws_ecs_task_definition" "api" {
             awslogs-group         = aws_cloudwatch_log_group.ecs_task_logs.name
             awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "api"
-            awslogs-create-group  = "true"
           }
         }
       },
@@ -117,11 +116,8 @@ resource "aws_ecs_task_definition" "api" {
           {
             containerPort = 8000
             hostPort      = 8000
-        }]
-        dependsOn = [{
-          containerName = "api"
-          condition     = "START"
-        }]
+          	}
+        ]
         environment = [
           {
             name  = "APP_HOST"
@@ -141,7 +137,6 @@ resource "aws_ecs_task_definition" "api" {
             awslogs-group         = aws_cloudwatch_log_group.ecs_task_logs.name
             awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "proxy"
-            awslogs-create-group  = "true"
           }
         }
       }
