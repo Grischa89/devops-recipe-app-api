@@ -16,22 +16,20 @@ RUN mkdir -p /vol/static && \
     mkdir -p /etc/nginx/conf.d && \
     chmod -R 755 /vol && \
     chown -R nginx:nginx /vol && \
-    chmod 755 /etc/nginx/conf.d && \
-    chown -R nginx:nginx /etc/nginx/conf.d && \
-    chown nginx:nginx /etc/nginx/default.conf.tpl && \
-    chown nginx:nginx /etc/nginx/gunicorn_headers && \
-    chmod 644 /etc/nginx/default.conf.tpl && \
-    chmod 644 /etc/nginx/gunicorn_headers && \
-    touch /etc/nginx/conf.d/default.conf && \
-    chown nginx:nginx /etc/nginx/conf.d/default.conf && \
-    chmod 644 /etc/nginx/conf.d/default.conf && \
+    chmod -R 755 /etc/nginx && \
+    chown -R nginx:nginx /etc/nginx && \
     chmod +x /run.sh && \
+    # Create a writable temp directory for nginx user
+    mkdir -p /tmp/nginx && \
+    chown -R nginx:nginx /tmp/nginx && \
+    chmod -R 755 /tmp/nginx && \
     # Verify permissions
     echo "Verifying nginx user and permissions:" && \
     id nginx && \
     ls -la /vol && \
     ls -la /etc/nginx/conf.d && \
-    ls -la /etc/nginx
+    ls -la /etc/nginx && \
+    ls -la /tmp/nginx
 
 USER nginx
 

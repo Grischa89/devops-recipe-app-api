@@ -134,6 +134,9 @@ resource "aws_ecs_task_definition" "api" {
             sourceVolume  = "static"
           }
         ]
+        linuxParameters = {
+          initProcessEnabled = true
+        }
         logConfiguration = {
           logDriver = "awslogs"
           options = {
