@@ -21,7 +21,7 @@ server {
     location / {
         include              gunicorn_headers;
         proxy_redirect       off;
-        proxy_pass          http://127.0.0.1:${APP_PORT};
+        proxy_pass          http://localhost:${APP_PORT};
         
         # Timeouts
         proxy_connect_timeout 600;
