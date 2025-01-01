@@ -148,7 +148,7 @@ resource "aws_ecs_task_definition" "api" {
     docker_volume_configuration {
       scope         = "task"
       autoprovision = true
-      driver       = "local"
+      driver        = "local"
     }
   }
 
