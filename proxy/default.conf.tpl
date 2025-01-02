@@ -5,16 +5,22 @@ server {
     error_log /dev/stdout debug;
     access_log /dev/stdout combined;
 
-    # Add resolver for ECS service discovery
-    resolver ${DNS_SERVER} valid=10s ipv6=off;
+    # Print environment variables for debugging
+    set $debug_dns_server '${DNS_SERVER}';
+    set $debug_app_host '${APP_HOST}';
+    set $debug_app_port '${APP_PORT}';
+
+    # Use DNS_SERVER from environment
+    resolver ${DNS_SERVER} ipv6=off;
     set $upstream_host ${APP_HOST};
     set $upstream_port ${APP_PORT};
 
     # Log DNS resolution attempts
     log_format debug_dns '$time_local [$level] '
                         'DNS_SERVER="$debug_dns_server" '
+                        'APP_HOST="$debug_app_host" '
+                        'APP_PORT="$debug_app_port" '
                         'upstream="$upstream_host:$upstream_port" '
-                        'resolver="$resolver" '
                         'host=$host '
                         'upstream_addr="$upstream_addr"';
     access_log /dev/stdout debug_dns;
