@@ -1,13 +1,18 @@
 server {
     listen ${LISTEN_PORT};
 
+    # Debug log the environment variables
+    error_log /dev/stdout debug;
+    access_log /dev/stdout combined;
+
     # Add resolver for ECS service discovery
     resolver ${DNS_SERVER} valid=10s;
     set $upstream_host ${APP_HOST};
 
-    # Enable debug logging for DNS resolution
-    error_log /dev/stdout debug;
-    access_log /dev/stdout combined;
+    # Log the variables being used
+    log_format debug_format '$time_local "$upstream_host:${APP_PORT}" '
+                          'resolver="${DNS_SERVER}"';
+    access_log /dev/stdout debug_format;
 
     # Increase header buffer size
     large_client_header_buffers 4 32k;
