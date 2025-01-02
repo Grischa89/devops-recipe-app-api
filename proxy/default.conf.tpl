@@ -1,6 +1,14 @@
 server {
     listen ${LISTEN_PORT};
 
+    # Add resolver for ECS service discovery
+    resolver ${DNS_SERVER} valid=10s;
+    set $upstream_host ${APP_HOST};
+
+    # Enable debug logging for DNS resolution
+    error_log /dev/stdout debug;
+    access_log /dev/stdout combined;
+
     # Increase header buffer size
     large_client_header_buffers 4 32k;
     client_header_buffer_size 32k;
@@ -21,8 +29,16 @@ server {
     location / {
         include              gunicorn_headers;
         proxy_redirect       off;
-        # Use the environment variable for service discovery
-        proxy_pass          http://${APP_HOST}:${APP_PORT};
+        
+        # Add debug headers to see what's being passed
+        add_header X-Debug-Host $upstream_host;
+        add_header X-Debug-Port ${APP_PORT};
+        add_header X-Debug-Resolver ${DNS_SERVER};
+
+        proxy_pass          http://$upstream_host:${APP_PORT};
+        
+        # Log upstream connection attempts
+        error_log /dev/stdout debug;
         
         client_max_body_size 10M;
     }
