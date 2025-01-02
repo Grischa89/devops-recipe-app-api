@@ -43,6 +43,7 @@ services:
         environment:
             - APP_PORT=9000
             - APP_HOST=app
+            - DNS_SERVER=127.0.0.11
 
 volumes:
     postgres-data:
