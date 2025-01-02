@@ -156,6 +156,7 @@ resource "aws_ecs_task_definition" "api" {
             awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "proxy"
           }
+
         }
       }
     ]
@@ -224,3 +225,4 @@ resource "aws_ecs_service" "api" {
     security_groups = [aws_security_group.ecs_service.id]
   }
 }
+
