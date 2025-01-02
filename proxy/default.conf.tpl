@@ -1,7 +1,7 @@
 server {
     listen ${LISTEN_PORT};
 
-    # Debug log the environment variables
+    # Debug log the environment variables and DNS settings
     error_log /dev/stdout debug;
     access_log /dev/stdout combined;
 
@@ -9,6 +9,15 @@ server {
     resolver ${DNS_SERVER} valid=10s ipv6=off;
     set $upstream_host ${APP_HOST};
     set $upstream_port ${APP_PORT};
+
+    # Log DNS resolution attempts
+    log_format debug_dns '$time_local [$level] '
+                        'DNS_SERVER="$debug_dns_server" '
+                        'upstream="$upstream_host:$upstream_port" '
+                        'resolver="$resolver" '
+                        'host=$host '
+                        'upstream_addr="$upstream_addr"';
+    access_log /dev/stdout debug_dns;
 
     # Enhanced logging format to debug DNS resolution
     log_format debug_format '$time_local [$level] '
@@ -41,19 +50,15 @@ server {
         include              gunicorn_headers;
         proxy_redirect       off;
         
-        # Enhanced debug headers
-        add_header X-Debug-Host $upstream_host always;
-        add_header X-Debug-Port $upstream_port always;
-        add_header X-Debug-Resolver $resolver always;
-        add_header X-Debug-Upstream-Addr $upstream_addr always;
+        # Add debug headers to see what's being passed
+        add_header X-Debug-Host $upstream_host;
+        add_header X-Debug-Port ${APP_PORT};
+        add_header X-Debug-Resolver ${DNS_SERVER};
 
-        # Log attempt before proxy pass
+        proxy_pass          http://$upstream_host:${APP_PORT};
+        
+        # Log upstream connection attempts
         error_log /dev/stdout debug;
-        
-        proxy_pass          http://$upstream_host:$upstream_port;
-        
-        # Log after proxy pass
-        add_header X-Upstream-Status $upstream_status always;
         
         client_max_body_size 10M;
     }
