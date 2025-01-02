@@ -6,18 +6,18 @@ server {
     listen ${LISTEN_PORT};
 
     # Print environment variables for debugging
-    set $debug_dns_server ${DNS_SERVER};
-    set $debug_app_host ${APP_HOST};
-    set $debug_app_port ${APP_PORT};
+    set $debug_dns_server "${DNS_SERVER:-127.0.0.11}";
+    set $debug_app_host "${APP_HOST:-localhost}";
+    set $debug_app_port "${APP_PORT:-80}";
 
     # Use DNS_SERVER from environment with fallback
     resolver ${DNS_SERVER:-127.0.0.11} valid=5s ipv6=off;
     
     # Set upstream variables with proper variable names
-    set $upstream_host ${APP_HOST};
-    set $upstream_port ${APP_PORT};
+    set $upstream_host "${APP_HOST:-localhost}";
+    set $upstream_port "${APP_PORT:-80}";
 
-    # Log DNS resolution attempts
+    # Log DNS resolution attempts and environment variables
     log_format debug_dns '$time_local [$level] '
                         'DNS_SERVER="$debug_dns_server" '
                         'APP_HOST="$debug_app_host" '
