@@ -6,12 +6,18 @@ server {
     access_log /dev/stdout combined;
 
     # Add resolver for ECS service discovery
-    resolver ${DNS_SERVER} valid=10s;
+    resolver ${DNS_SERVER} valid=10s ipv6=off;
     set $upstream_host ${APP_HOST};
+    set $upstream_port ${APP_PORT};
 
-    # Log the variables being used
-    log_format debug_format '$time_local "$upstream_host:${APP_PORT}" '
-                          'resolver="${DNS_SERVER}"';
+    # Enhanced logging format to debug DNS resolution
+    log_format debug_format '$time_local [$level] '
+                          'upstream="$upstream_host:$upstream_port" '
+                          'resolver="$resolver" '
+                          'host=$host '
+                          'request="$request" '
+                          'upstream_addr="$upstream_addr" '
+                          'upstream_status="$upstream_status"';
     access_log /dev/stdout debug_format;
 
     # Increase header buffer size
@@ -35,15 +41,19 @@ server {
         include              gunicorn_headers;
         proxy_redirect       off;
         
-        # Add debug headers to see what's being passed
-        add_header X-Debug-Host $upstream_host;
-        add_header X-Debug-Port ${APP_PORT};
-        add_header X-Debug-Resolver ${DNS_SERVER};
+        # Enhanced debug headers
+        add_header X-Debug-Host $upstream_host always;
+        add_header X-Debug-Port $upstream_port always;
+        add_header X-Debug-Resolver $resolver always;
+        add_header X-Debug-Upstream-Addr $upstream_addr always;
 
-        proxy_pass          http://$upstream_host:${APP_PORT};
-        
-        # Log upstream connection attempts
+        # Log attempt before proxy pass
         error_log /dev/stdout debug;
+        
+        proxy_pass          http://$upstream_host:$upstream_port;
+        
+        # Log after proxy pass
+        add_header X-Upstream-Status $upstream_status always;
         
         client_max_body_size 10M;
     }
