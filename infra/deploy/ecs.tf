@@ -93,10 +93,6 @@ resource "aws_ecs_task_definition" "api" {
             name  = "LISTEN_PORT"
             value = "9000"
           },
-          {
-            name  = "PATH"
-            value = "/scripts:/py/bin:${PATH}"
-          }
         ]
         mountPoints = [
           {
