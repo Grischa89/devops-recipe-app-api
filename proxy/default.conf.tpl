@@ -27,7 +27,6 @@ server {
         client_max_body_size 10M;
     }
 
-    # Handle favicon.ico separately
     location = /favicon.ico {
         return 204;
         access_log off;
