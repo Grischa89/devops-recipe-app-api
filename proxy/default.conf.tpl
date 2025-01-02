@@ -21,13 +21,7 @@ server {
     location / {
         include              gunicorn_headers;
         proxy_redirect       off;
-        proxy_pass          http://localhost:${APP_PORT};
-        
-        # Timeouts
-        proxy_connect_timeout 600;
-        proxy_send_timeout    600;
-        proxy_read_timeout    600;
-        send_timeout         600;
+        proxy_pass          http://app:${APP_PORT};
         
         client_max_body_size 10M;
     }
