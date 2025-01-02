@@ -2,6 +2,7 @@
 
 set -e
 
-echo "Starting Gunicorn on port ${LISTEN_PORT:-9000}..."
-echo "Number of CPU cores: $(nproc)"
-exec gunicorn --bind 0.0.0.0:${LISTEN_PORT:-9000} --workers 4 app.wsgi
+python manage.py wait_for_db
+python manage.py migrate
+python manage.py collectstatic --noinput
+gunicorn app.wsgi:application --bind 0.0.0.0:9000
