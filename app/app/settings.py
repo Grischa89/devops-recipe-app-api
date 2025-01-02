@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 # DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']  # For testing. In production, use specific domain names
+ALLOWED_HOSTS = ['*']  # For testing. Replace with actual domain/IP in production
 ALLOWED_HOSTS.extend(
     filter(
         None,
@@ -155,3 +155,6 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     'COMPONENT_SPLIT_REQUEST': True,
 }
+
+# Add CSRF settings if needed
+CSRF_TRUSTED_ORIGINS = ['https://*', 'http://*']  # Adjust according to your needs
