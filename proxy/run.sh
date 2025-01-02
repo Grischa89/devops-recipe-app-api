@@ -16,7 +16,7 @@ echo "Testing DNS resolution:"
 nslookup ${APP_HOST} || echo "DNS lookup failed for ${APP_HOST}"
 
 # Substitute environment variables in the Nginx configuration
-envsubst '${LISTEN_PORT}' < /etc/nginx/default.conf.tpl > /etc/nginx/conf.d/default.conf
+envsubst '${LISTEN_PORT} ${APP_HOST} ${APP_PORT}' < /etc/nginx/default.conf.tpl > /etc/nginx/conf.d/default.conf
 
 echo "Final Nginx configuration:"
 cat /etc/nginx/conf.d/default.conf || echo "Failed to read config"
