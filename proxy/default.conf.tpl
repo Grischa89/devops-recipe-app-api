@@ -1,9 +1,9 @@
+# Debug log the environment variables and DNS settings
+error_log /dev/stdout debug;
+access_log /dev/stdout combined;
+
 server {
     listen ${LISTEN_PORT};
-
-    # Debug log the environment variables and DNS settings
-    error_log /dev/stdout debug;
-    access_log /dev/stdout combined;
 
     # Print environment variables for debugging
     set $debug_dns_server ${DNS_SERVER};
