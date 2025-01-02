@@ -3,7 +3,7 @@ error_log /dev/stdout debug;
 access_log /dev/stdout combined;
 
 server {
-    listen ${LISTEN_PORT:-8000};
+    listen 8000;
 
     # Print environment variables for debugging
     set $debug_dns_server "${DNS_SERVER:-127.0.0.11}";
@@ -14,8 +14,8 @@ server {
     resolver $debug_dns_server valid=5s ipv6=off;
     
     # Set upstream variables with proper variable names
-    set $upstream_host "${APP_HOST:-localhost}";
-    set $upstream_port "${APP_PORT:-80}";
+    set $upstream_host $debug_app_host;
+    set $upstream_port $debug_app_port;
 
     # Log DNS resolution attempts and environment variables
     log_format debug_dns '$time_local [$level] '
