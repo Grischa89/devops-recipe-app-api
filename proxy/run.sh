@@ -1,4 +1,4 @@
-#!/bin/sh
+rn#!/bin/sh
 
 set -e
 
@@ -10,7 +10,6 @@ echo "Environment variables:"
 echo "APP_HOST: ${APP_HOST}"
 echo "APP_PORT: ${APP_PORT}"
 echo "LISTEN_PORT: ${LISTEN_PORT}"
-echo "DNS_SERVER: ${DNS_SERVER}"
 
 # Check DNS resolution
 echo "Testing DNS resolution:"
