@@ -6,12 +6,14 @@ server {
     access_log /dev/stdout combined;
 
     # Print environment variables for debugging
-    set $debug_dns_server '${DNS_SERVER}';
-    set $debug_app_host '${APP_HOST}';
-    set $debug_app_port '${APP_PORT}';
+    set $debug_dns_server ${DNS_SERVER};
+    set $debug_app_host ${APP_HOST};
+    set $debug_app_port ${APP_PORT};
 
-    # Use DNS_SERVER from environment
-    resolver ${DNS_SERVER} ipv6=off;
+    # Use DNS_SERVER from environment with fallback
+    resolver ${DNS_SERVER:-127.0.0.11} valid=5s ipv6=off;
+    
+    # Set upstream variables with proper variable names
     set $upstream_host ${APP_HOST};
     set $upstream_port ${APP_PORT};
 
@@ -24,16 +26,6 @@ server {
                         'host=$host '
                         'upstream_addr="$upstream_addr"';
     access_log /dev/stdout debug_dns;
-
-    # Enhanced logging format to debug DNS resolution
-    log_format debug_format '$time_local [$level] '
-                          'upstream="$upstream_host:$upstream_port" '
-                          'resolver="$resolver" '
-                          'host=$host '
-                          'request="$request" '
-                          'upstream_addr="$upstream_addr" '
-                          'upstream_status="$upstream_status"';
-    access_log /dev/stdout debug_format;
 
     # Increase header buffer size
     large_client_header_buffers 4 32k;
@@ -57,11 +49,11 @@ server {
         proxy_redirect       off;
         
         # Add debug headers to see what's being passed
-        add_header X-Debug-Host $upstream_host;
-        add_header X-Debug-Port ${APP_PORT};
-        add_header X-Debug-Resolver ${DNS_SERVER};
+        add_header X-Debug-Host $upstream_host always;
+        add_header X-Debug-Port $upstream_port always;
+        add_header X-Debug-Resolver $debug_dns_server always;
 
-        proxy_pass          http://$upstream_host:${APP_PORT};
+        proxy_pass          http://$upstream_host:$upstream_port;
         
         # Log upstream connection attempts
         error_log /dev/stdout debug;
