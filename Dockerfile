@@ -36,10 +36,14 @@ RUN python -m venv /py && \
     chown -R django-user:django-group /vol && \
     chown -R django-user:django-group /tmp && \
     chown -R django-user:django-group /home/django-user && \
+    chown -R django-user:django-group /scripts && \
     echo "Setting permissions..." && \
     chmod -R 755 /vol && \
     chmod -R 755 /tmp && \
     chmod -R +x /scripts/* && \
+    echo "Verifying directories and permissions:" && \
+    ls -la /scripts && \
+    ls -la /scripts/* && \
     echo "Verifying user and permissions:" && \
     id django-user && \
     ls -la /vol/web && \
@@ -59,8 +63,11 @@ RUN echo "Verifying environment as django-user:" && \
     echo "PATH: $PATH" && \
     echo "Python location: $(which python)" && \
     python --version && \
-    # Verify run.sh is accessible
-    which run.sh  # This will fail if run.sh isn't in PATH
+    # Verify scripts directory and run.sh
+    echo "Verifying scripts access:" && \
+    ls -la /scripts && \
+    ls -la /scripts/* && \
+    which run.sh
 
 VOLUME ["/vol/web/media", "/vol/web/static", "/tmp"]
 
