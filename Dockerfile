@@ -39,7 +39,7 @@ RUN python -m venv /py && \
     echo "Setting permissions..." && \
     chmod -R 755 /vol && \
     chmod -R 755 /tmp && \
-    chmod -R +x /scripts && \
+    chmod -R +x /scripts/* && \
     echo "Verifying user and permissions:" && \
     id django-user && \
     ls -la /vol/web && \
@@ -58,7 +58,9 @@ RUN echo "Verifying environment as django-user:" && \
     echo "Home directory: $HOME" && \
     echo "PATH: $PATH" && \
     echo "Python location: $(which python)" && \
-    python --version
+    python --version && \
+    # Verify run.sh is accessible
+    which run.sh  # This will fail if run.sh isn't in PATH
 
 VOLUME ["/vol/web/media", "/vol/web/static", "/tmp"]
 
