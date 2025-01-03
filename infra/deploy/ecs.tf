@@ -125,7 +125,7 @@ resource "aws_ecs_task_definition" "api" {
         environment = [
           {
             name  = "APP_HOST"
-            value = "localhost"
+            value = "app"
           },
           {
             name  = "APP_PORT"
