@@ -15,7 +15,6 @@ services:
             - DB_PASS=${DB_PASS}
             - SECRET_KEY=${DJANGO_SECRET_KEY}
             - ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
-            - LISTEN_PORT=9000
         depends_on:
             - db
 
@@ -40,10 +39,6 @@ services:
         volumes:
             - static-data:/vol/static
             - media-data:/vol/media
-        environment:
-            - APP_PORT=9000
-            - APP_HOST=app
-            - DNS_SERVER=127.0.0.11
 
 volumes:
     postgres-data:
