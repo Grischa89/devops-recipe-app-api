@@ -3,9 +3,7 @@ LABEL maintainer="londonappdeveloper.com"
 
 ENV PYTHONUNBUFFERED 1
 
-ARG UID=1000
-ARG GID=1000
-
+ARG UID=101
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./scripts /scripts
@@ -25,42 +23,22 @@ RUN python -m venv /py && \
     fi && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
-    echo "Creating django-user..." && \
-    addgroup -g $GID django-group && \
-    adduser -u $UID -G django-group -D -h /home/django-user django-user && \
-    echo "Creating directories..." && \
+    adduser \
+        --uid $UID \
+        --disabled-password \
+        --no-create-home \
+        django-user && \
     mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
-    mkdir -p /tmp && \
-    echo "Setting ownership..." && \
-    chown -R django-user:django-group /vol && \
-    chown -R django-user:django-group /tmp && \
-    chown -R django-user:django-group /home/django-user && \
-    echo "Setting permissions..." && \
-    chmod -R 755 /vol && \
-    chmod -R 755 /tmp && \
-    chmod -R +x /scripts && \
-    echo "Verifying user and permissions:" && \
-    id django-user && \
-    ls -la /vol/web && \
-    ls -la /tmp && \
-    ls -la /home/django-user
+    chown -R django-user:django-user /vol/web && \
+    chmod -R 755 /vol/web && \
+    chmod -R +x /scripts
 
 ENV PATH="/scripts:/py/bin:$PATH"
 
-# Temporarily comment this out to confirm Fargate will start:
 USER django-user
 
-# Add verification of environment after user switch
-RUN echo "Verifying environment as django-user:" && \
-    echo "Current user: $(whoami)" && \
-    echo "Current UID: $(id -u)" && \
-    echo "Current GID: $(id -g)" && \
-    echo "Home directory: $HOME" && \
-    echo "PATH: $PATH" && \
-    echo "Python location: $(which python)" && \
-    python --version
-
-VOLUME ["/vol/web/media", "/vol/web/static", "/tmp"]
+VOLUME /vol/web/media
+VOLUME /vol/web/static
 
 CMD ["run.sh"]

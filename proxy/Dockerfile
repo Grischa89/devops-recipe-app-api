@@ -13,22 +13,15 @@ USER root
 
 RUN mkdir -p /vol/static && \
     mkdir -p /vol/media && \
-    mkdir -p /etc/nginx/conf.d && \
-    mkdir -p /var/cache/nginx && \
-    mkdir -p /var/run && \
-    # Set more permissive permissions for ECS
-    chmod 777 /vol && \
-    chmod 777 /vol/static && \
-    chmod 777 /vol/media && \
-    chmod 777 /etc/nginx && \
-    chmod 777 /var/cache/nginx && \
-    chmod 777 /var/run && \
+    chmod -R 755 /vol && \
+    chown -R nginx:nginx /vol && \
+    touch /etc/nginx/conf.d/default.conf && \
+    chown nginx:nginx /etc/nginx/conf.d/default.conf && \
     chmod +x /run.sh
 
 USER nginx
 
-# Remove VOLUME declarations as ECS handles this
-# VOLUME /vol/static
-# VOLUME /vol/media
+VOLUME /vol/static
+VOLUME /vol/media
 
 CMD ["/run.sh"]
