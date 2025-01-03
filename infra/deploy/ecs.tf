@@ -62,7 +62,7 @@ resource "aws_ecs_task_definition" "api" {
         name              = "api"
         image             = var.ecr_app_image
         essential         = true
-        user              = "1000:1000"
+        user              = "django-user"
         memoryReservation = 256
         environment = [
           {
@@ -101,13 +101,6 @@ resource "aws_ecs_task_definition" "api" {
             sourceVolume  = "static"
           }
         ]
-        healthCheck = {
-          command     = ["CMD-SHELL", "curl -f http://localhost:9000/admin/ || exit 1"]
-          interval    = 30
-          timeout     = 5
-          retries     = 3
-          startPeriod = 60
-        }
         logConfiguration = {
           logDriver = "awslogs"
           options = {
@@ -122,7 +115,7 @@ resource "aws_ecs_task_definition" "api" {
         image             = var.ecr_proxy_image
         essential         = true
         memoryReservation = 256
-        user              = "101:101"
+        user              = "nginx"
         portMappings = [
           {
             containerPort = 8000
@@ -148,12 +141,6 @@ resource "aws_ecs_task_definition" "api" {
             readOnly      = true
             containerPath = "/vol/static"
             sourceVolume  = "static"
-          }
-        ]
-        dependsOn = [
-          {
-            containerName = "api"
-            condition     = "HEALTHY"
           }
         ]
         logConfiguration = {
@@ -208,14 +195,6 @@ resource "aws_security_group" "ecs_service" {
     to_port     = 8000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allow internal communication between containers
-  ingress {
-    from_port = 9000
-    to_port   = 9000
-    protocol  = "tcp"
-    self      = true
   }
 }
 
