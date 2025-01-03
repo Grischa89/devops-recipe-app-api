@@ -112,7 +112,7 @@ resource "aws_ecs_task_definition" "api" {
             awslogs-stream-prefix = "api"
           }
         }
-        command = ["/scripts/run.sh"]
+        #command = ["/scripts/run.sh"]
       },
       {
         name              = "proxy"
