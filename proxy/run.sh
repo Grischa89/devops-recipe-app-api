@@ -6,20 +6,14 @@ echo "Starting proxy run.sh script..."
 echo "Current user: $(whoami)"
 echo "Current UID: $(id -u)"
 echo "Current GID: $(id -g)"
-echo "Environment variables:"
-echo "APP_HOST: ${APP_HOST}"
-echo "APP_PORT: ${APP_PORT}"
-echo "LISTEN_PORT: ${LISTEN_PORT}"
+echo "Listing permissions of key directories:"
+ls -la /vol/static
+ls -la /etc/nginx/conf.d
+ls -la /var/cache/nginx
+ls -la /var/run
 
-# Check DNS resolution
-echo "Testing DNS resolution:"
-nslookup ${APP_HOST} || echo "DNS lookup failed for ${APP_HOST}"
-
-# Substitute environment variables in the Nginx configuration
-envsubst '${LISTEN_PORT} ${APP_HOST} ${APP_PORT}' < /etc/nginx/default.conf.tpl > /etc/nginx/conf.d/default.conf
-
-echo "Final Nginx configuration:"
-cat /etc/nginx/conf.d/default.conf || echo "Failed to read config"
+echo "Generating Nginx configuration..."
+envsubst < /etc/nginx/default.conf.tpl > /etc/nginx/conf.d/default.conf
 
 echo "Starting Nginx..."
 nginx -g 'daemon off;'
