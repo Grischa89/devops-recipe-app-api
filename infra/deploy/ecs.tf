@@ -114,6 +114,13 @@ resource "aws_ecs_task_definition" "api" {
           }
         }
         # command = ["/scripts/run.sh"]
+        healthCheck = {
+          command     = ["CMD-SHELL", "curl -f http://localhost:9000/ || exit 1"]
+          interval    = 30
+          timeout     = 5
+          retries     = 3
+          startPeriod = 60
+        }
       },
       {
         name              = "proxy"
@@ -131,8 +138,7 @@ resource "aws_ecs_task_definition" "api" {
         environment = [
           {
             name  = "APP_HOST"
-            value = "127.0.0.1" 
-            #value = "localhost" last change
+            value = "127.0.0.1"
           },
           {
             name  = "APP_PORT"
@@ -162,6 +168,12 @@ resource "aws_ecs_task_definition" "api" {
           }
 
         }
+        dependsOn = [
+          {
+            containerName = "api"
+            condition     = "HEALTHY"
+          }
+        ]
       }
     ]
   )
