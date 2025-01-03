@@ -16,27 +16,19 @@ RUN mkdir -p /vol/static && \
     mkdir -p /etc/nginx/conf.d && \
     mkdir -p /var/cache/nginx && \
     mkdir -p /var/run && \
-    chmod -R 755 /vol && \
-    chown -R nginx:nginx /vol && \
-    chmod -R 777 /etc/nginx && \
-    chown -R nginx:nginx /etc/nginx && \
-    chmod -R 755 /var/cache/nginx && \
-    chown -R nginx:nginx /var/cache/nginx && \
-    chmod -R 755 /var/run && \
-    chown -R nginx:nginx /var/run && \
-    chmod +x /run.sh && \
-    # Verify permissions
-    echo "Verifying nginx user and permissions:" && \
-    id nginx && \
-    ls -la /vol && \
-    ls -la /etc/nginx/conf.d && \
-    ls -la /etc/nginx && \
-    ls -la /var/cache/nginx && \
-    ls -la /var/run
+    # Set more permissive permissions for ECS
+    chmod 777 /vol && \
+    chmod 777 /vol/static && \
+    chmod 777 /vol/media && \
+    chmod 777 /etc/nginx && \
+    chmod 777 /var/cache/nginx && \
+    chmod 777 /var/run && \
+    chmod +x /run.sh
 
 USER nginx
 
-VOLUME /vol/static
-VOLUME /vol/media
+# Remove VOLUME declarations as ECS handles this
+# VOLUME /vol/static
+# VOLUME /vol/media
 
 CMD ["/run.sh"]
