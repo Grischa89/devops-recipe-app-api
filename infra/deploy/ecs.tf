@@ -62,9 +62,8 @@ resource "aws_ecs_task_definition" "api" {
         name              = "api"
         image             = var.ecr_app_image
         essential         = true
-        memoryReservation = 256
         user              = "1000:1000"
-        # user = "${var.app_user_id}:${var.app_group_id}"
+        memoryReservation = 256
         environment = [
           {
             name  = "DJANGO_SECRET_KEY"
@@ -93,7 +92,7 @@ resource "aws_ecs_task_definition" "api" {
           {
             name  = "LISTEN_PORT"
             value = "9000"
-          },
+          }
         ]
         mountPoints = [
           {
@@ -102,8 +101,12 @@ resource "aws_ecs_task_definition" "api" {
             sourceVolume  = "static"
           }
         ]
-        linuxParameters = {
-          initProcessEnabled = true
+        healthCheck = {
+          command     = ["CMD-SHELL", "curl -f http://localhost:9000/admin/ || exit 1"]
+          interval    = 30
+          timeout     = 5
+          retries     = 3
+          startPeriod = 60
         }
         logConfiguration = {
           logDriver = "awslogs"
@@ -112,14 +115,6 @@ resource "aws_ecs_task_definition" "api" {
             awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "api"
           }
-        }
-        # command = ["/scripts/run.sh"]
-        healthCheck = {
-          command     = ["CMD-SHELL", "curl -f http://localhost:9000/ || exit 1"]
-          interval    = 30
-          timeout     = 5
-          retries     = 3
-          startPeriod = 60
         }
       },
       {
@@ -155,9 +150,12 @@ resource "aws_ecs_task_definition" "api" {
             sourceVolume  = "static"
           }
         ]
-        linuxParameters = {
-          initProcessEnabled = true
-        }
+        dependsOn = [
+          {
+            containerName = "api"
+            condition     = "HEALTHY"
+          }
+        ]
         logConfiguration = {
           logDriver = "awslogs"
           options = {
@@ -165,14 +163,7 @@ resource "aws_ecs_task_definition" "api" {
             awslogs-region        = data.aws_region.current.name
             awslogs-stream-prefix = "proxy"
           }
-
         }
-        dependsOn = [
-          {
-            containerName = "api"
-            condition     = "HEALTHY"
-          }
-        ]
       }
     ]
   )
