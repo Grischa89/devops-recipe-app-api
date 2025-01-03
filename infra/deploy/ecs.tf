@@ -63,8 +63,8 @@ resource "aws_ecs_task_definition" "api" {
         image             = var.ecr_app_image
         essential         = true
         memoryReservation = 256
-        #user              = "django-user"
-        user = "${var.app_user_id}:${var.app_group_id}"
+        user              = "django-user"
+        # user = "${var.app_user_id}:${var.app_group_id}"
         environment = [
           {
             name  = "DJANGO_SECRET_KEY"
@@ -131,8 +131,8 @@ resource "aws_ecs_task_definition" "api" {
         environment = [
           {
             name  = "APP_HOST"
-            value = "localhost"
-            # value = "127.0.0.1" last change
+            value = "127.0.0.1" 
+            #value = "localhost" last change
           },
           {
             name  = "APP_PORT"
