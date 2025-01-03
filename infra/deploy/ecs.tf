@@ -63,8 +63,8 @@ resource "aws_ecs_task_definition" "api" {
         image             = var.ecr_app_image
         essential         = true
         memoryReservation = 256
-        user              = "django-user"
-        # "${var.app_user_id}:${var.app_group_id}"
+        #user              = "django-user"
+        user = "${var.app_user_id}:${var.app_group_id}"
         environment = [
           {
             name  = "DJANGO_SECRET_KEY"
