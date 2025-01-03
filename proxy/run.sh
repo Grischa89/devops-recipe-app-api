@@ -15,5 +15,8 @@ ls -la /var/run
 echo "Generating Nginx configuration..."
 envsubst < /etc/nginx/default.conf.tpl > /etc/nginx/conf.d/default.conf
 
+echo "Generated Nginx configuration:"
+cat /etc/nginx/conf.d/default.conf
+
 echo "Starting Nginx..."
 nginx -g 'daemon off;'
