@@ -49,7 +49,7 @@ RUN python -m venv /py && \
 ENV PATH="/scripts:/py/bin:$PATH"
 
 # Temporarily comment this out to confirm Fargate will start:
-# USER django-user
+USER django-user
 
 # Add verification of environment after user switch
 RUN echo "Verifying environment as django-user:" && \
