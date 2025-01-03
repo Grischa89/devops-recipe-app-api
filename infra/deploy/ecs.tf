@@ -131,7 +131,8 @@ resource "aws_ecs_task_definition" "api" {
         environment = [
           {
             name  = "APP_HOST"
-            value = "127.0.0.1"
+            value = "localhost"
+            # value = "127.0.0.1" last change
           },
           {
             name  = "APP_PORT"
@@ -205,6 +206,14 @@ resource "aws_security_group" "ecs_service" {
     to_port     = 8000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow internal communication between containers
+  ingress {
+    from_port = 9000
+    to_port   = 9000
+    protocol  = "tcp"
+    self      = true
   }
 }
 
