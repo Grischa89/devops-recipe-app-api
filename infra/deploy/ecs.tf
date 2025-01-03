@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "api" {
   container_definitions = jsonencode(
     [
       {
-        name              = "app"
+        name              = "api"
         image             = var.ecr_app_image
         essential         = true
         user              = "0"
@@ -125,7 +125,7 @@ resource "aws_ecs_task_definition" "api" {
         environment = [
           {
             name  = "APP_HOST"
-            value = "localhost"
+            value = "api"
           },
           {
             name  = "APP_PORT"
