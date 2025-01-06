@@ -35,3 +35,15 @@ resource "aws_lb" "api" {
   subnets            = [aws_subnet.public_a.id, aws_subnet.public_b.id]
   security_groups    = [aws_security_group.lb.id]
 }
+
+resource "aws_lb_target_group" "api" {
+  name        = "${local.prefix}-api"
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.main.id
+  target_type = "ip" # ecs has a private/internal ip address
+  port        = 8000 # load balancer will get request on 443 and forward traffic to this port
+
+  health_check {
+    path = "/api/health-check/"  # ensures that the load balancer forwards traffic to the healthy tasks
+  }
+}
