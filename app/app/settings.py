@@ -36,6 +36,10 @@ ALLOWED_HOSTS.extend(
 )
 if os.environ.get('AWS_EXECUTION_ENV'):
     ALLOWED_HOSTS.append(gethostbyname(gethostname()))
+    print("ALLOWED_HOSTS", ALLOWED_HOSTS)
+    print("The healthcheck request will come from the load balancer and will be made to the ip that is given to the task")
+    #normally request by user to our custom domain via http/https # here we check if the task is accessible from the load balancer not the host name
+
 # Application definition
 
 INSTALLED_APPS = [
