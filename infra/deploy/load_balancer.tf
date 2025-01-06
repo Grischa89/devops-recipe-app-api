@@ -36,7 +36,7 @@ resource "aws_lb" "api" {
   security_groups    = [aws_security_group.lb.id]
 }
 
-resource "aws_lb_target_group" "api" {
+resource "aws_lb_target_group" "api" { #target_group is the outgoing target (distributing side) or the load balancer
   name        = "${local.prefix}-api"
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
@@ -44,6 +44,17 @@ resource "aws_lb_target_group" "api" {
   port        = 8000 # load balancer will get request on 443 and forward traffic to this port
 
   health_check {
-    path = "/api/health-check/"  # ensures that the load balancer forwards traffic to the healthy tasks
+    path = "/api/health-check/" # ensures that the load balancer forwards traffic to the healthy tasks
+  }
+}
+
+resource "aws_lb_listener" "api" { #listener is the entry point (recieving side) for the load balancer
+  load_balancer_arn = aws_lb.api.arn
+  port              = 80
+  protocol          = "HTTP" #(for now, later HTTPS with a certificate)
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.api.arn
   }
 }
