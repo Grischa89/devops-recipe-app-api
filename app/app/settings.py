@@ -156,5 +156,3 @@ SPECTACULAR_SETTINGS = {
     'COMPONENT_SPLIT_REQUEST': True,
 }
 
-# Add CSRF settings if needed
-CSRF_TRUSTED_ORIGINS = ['https://*', 'http://*']  # Adjust according to your needs
