@@ -269,35 +269,6 @@ resource "aws_iam_user_policy_attachment" "iam" {
 # Policy for CloudWatch access #
 ################################
 
-data "aws_iam_policy_document" "logs" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "logs:DeleteLogGroup",
-      "logs:DescribeLogGroups",
-      "logs:CreateLogGroup",
-      "logs:TagResource",
-      "logs:ListTagsLogGroup"
-    ]
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_policy" "logs" {
-  name        = "${aws_iam_user.cd.name}-logs"
-  description = "Allow user to manage CloudWatch resources."
-  policy      = data.aws_iam_policy_document.logs.json
-}
-
-resource "aws_iam_user_policy_attachment" "logs" {
-  user       = aws_iam_user.cd.name
-  policy_arn = aws_iam_policy.logs.arn
-}
-
-################################
-# Policy for CloudWatch access #
-################################
-
 data "aws_iam_policy_document" "cloudwatch" {
   statement {
     effect = "Allow"
