@@ -278,8 +278,8 @@ data "aws_iam_policy_document" "logs" {
       "logs:CreateLogGroup",
       "logs:TagResource",
       "logs:ListTagsLogGroup",
-      "cloudwatch:GetMetricStatistics",
-      "cloudwatch:ListMetrics",
+      "logs:GetMetricStatistics",
+      "logs:ListMetrics",
     ]
     resources = ["*"]
   }
@@ -296,9 +296,9 @@ resource "aws_iam_user_policy_attachment" "logs" {
   policy_arn = aws_iam_policy.logs.arn
 }
 
-	#########################
-	# Policy for ELB access #
-	#########################
+#########################
+# Policy for ELB access #
+#########################
 data "aws_iam_policy_document" "elb" {
   statement {
     effect = "Allow"
