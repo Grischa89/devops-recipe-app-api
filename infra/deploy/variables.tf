@@ -33,6 +33,7 @@ variable "ecr_app_image" {
 variable "django_secret_key" {
   description = "Secret key for Django"
 }
+
 variable "dns_zone_name" {
   description = "Domain name"
   default     = "dont-talk-just.click"

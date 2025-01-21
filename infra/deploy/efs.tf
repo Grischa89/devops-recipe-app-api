@@ -37,8 +37,7 @@ resource "aws_efs_mount_target" "media_b" {
 }
 
 resource "aws_efs_access_point" "media" {
-  # access point for media storage
-  # has to be different if one fs and multiple apps 
+  # access point for media storage - has to be different if one fs and multiple apps 
   file_system_id = aws_efs_file_system.media.id
   root_directory {
     path = "/api/media"
