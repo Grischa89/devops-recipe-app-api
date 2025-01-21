@@ -83,7 +83,7 @@ resource "aws_ecs_task_definition" "api" {
             value = aws_db_instance.main.password
           },
           {
-            name = "ALLOWED_HOSTS"
+            name  = "ALLOWED_HOSTS"
             value = aws_route53_record.app.fqdn #value = "*"
           }
         ]
