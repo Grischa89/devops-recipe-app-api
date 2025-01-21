@@ -84,8 +84,7 @@ resource "aws_ecs_task_definition" "api" {
           },
           {
             name = "ALLOWED_HOSTS"
-            #value = "*"
-            value = aws_route53_record.app.fqdn
+            value = aws_route53_record.app.fqdn #value = "*"
           }
         ]
         mountPoints = [
@@ -154,6 +153,7 @@ resource "aws_ecs_task_definition" "api" {
   volume {
     name = "static"
   }
+
   volume {
     name = "efs-media"
     efs_volume_configuration {
@@ -230,7 +230,6 @@ resource "aws_ecs_service" "api" {
 
   network_configuration {
     assign_public_ip = false #before using a load balancer, we needed a public ip address and public subnets
-
     subnets = [
       aws_subnet.private_a.id,
       aws_subnet.private_b.id
