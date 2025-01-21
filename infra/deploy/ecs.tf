@@ -213,8 +213,8 @@ resource "aws_security_group" "ecs_service" {
     from_port = 8000
     to_port   = 8000
     protocol  = "tcp"
-    security_groups = [ # does only allow access from the load balancer (or the load balancer security group)
-      aws_security_group.lb.id
+    security_groups = [  
+      aws_security_group.lb.id #does only allow access from the load balancer (or the load balancer security group)
     ]
   }
 }
@@ -229,7 +229,7 @@ resource "aws_ecs_service" "api" {
   enable_execute_command = true
 
   network_configuration {
-    assign_public_ip = false #before using a load balancer, we needed a public ip address and public subnets
+    #assign_public_ip = false #before using a load balancer, we needed a public ip address and public subnets
     subnets = [
       aws_subnet.private_a.id,
       aws_subnet.private_b.id
