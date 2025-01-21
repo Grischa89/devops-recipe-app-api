@@ -269,34 +269,36 @@ resource "aws_iam_user_policy_attachment" "iam" {
 # Policy for CloudWatch access #
 ################################
 
-data "aws_iam_policy_document" "cloudwatch" {
+data "aws_iam_policy_document" "logs" {
   statement {
     effect = "Allow"
     actions = [
-      "cloudwatch:PutMetricAlarm",
-      "cloudwatch:DescribeAlarms",
-      "cloudwatch:DeleteAlarms",
-      "cloudwatch:DescribeAlarmHistory",
+      "logs:DeleteLogGroup",
+      "logs:DescribeLogGroups",
+      "logs:CreateLogGroup",
+      "logs:TagResource",
+      "logs:ListTagsLogGroup",
       "cloudwatch:GetMetricStatistics",
       "cloudwatch:ListMetrics",
-      "cloudwatch:ListTagsForResource"
     ]
     resources = ["*"]
   }
 }
 
-resource "aws_iam_policy" "cloudwatch" {
-  name        = "${aws_iam_user.cd.name}-cloudwatch"
+resource "aws_iam_policy" "logs" {
+  name        = "${aws_iam_user.cd.name}-logs"
   description = "Allow user to manage CloudWatch resources."
-  policy      = data.aws_iam_policy_document.cloudwatch.json
+  policy      = data.aws_iam_policy_document.logs.json
 }
 
-resource "aws_iam_user_policy_attachment" "cloudwatch" {
+resource "aws_iam_user_policy_attachment" "logs" {
   user       = aws_iam_user.cd.name
-  policy_arn = aws_iam_policy.cloudwatch.arn
+  policy_arn = aws_iam_policy.logs.arn
 }
 
-
+	#########################
+	# Policy for ELB access #
+	#########################
 data "aws_iam_policy_document" "elb" {
   statement {
     effect = "Allow"
