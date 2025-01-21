@@ -54,6 +54,24 @@ resource "aws_lb_listener" "api" { #listener is the entry point (recieving side)
   protocol          = "HTTP" #(for now, later HTTPS with a certificate)
 
   default_action {
+    type = "redirect"
+
+    redirect { # http redirect to https
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301" # 301 is a permanent redirect
+    }
+  }
+}
+
+resource "aws_lb_listener" "api_https" {
+  load_balancer_arn = aws_lb.api.arn
+  port              = 443
+  protocol          = "HTTPS"
+
+  certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
+
+  default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.api.arn
   }

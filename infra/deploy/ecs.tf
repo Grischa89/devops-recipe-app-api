@@ -83,8 +83,9 @@ resource "aws_ecs_task_definition" "api" {
             value = aws_db_instance.main.password
           },
           {
-            name  = "ALLOWED_HOSTS"
-            value = "*"
+            name = "ALLOWED_HOSTS"
+            #value = "*"
+            value = aws_route53_record.app.fqdn
           }
         ]
         mountPoints = [
