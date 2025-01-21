@@ -299,6 +299,7 @@ resource "aws_iam_user_policy_attachment" "logs" {
 #########################
 # Policy for ELB access #
 #########################
+
 data "aws_iam_policy_document" "elb" {
   statement {
     effect = "Allow"
